@@ -1,0 +1,27 @@
+<div id="wrapper">
+        {% if messages %}
+            <ul class="flashes">
+            {% for message in messages %}
+                <li class="error">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    <div>
+        <h2>JOIN GROUP!</h2>
+        <form action="/sos/join/" method="POST">
+            {% csrf_token %}
+            Group Name: <input type="text" name="name" id="" placeholder="Group Name">
+            Password: <input type="text" name="password">
+            <input type="submit" value="JOIN">
+        </form>
+    </div>
+    <div>
+        <h2>CREATE GROUP!</h2>
+        <form action="/snack_app/create" method="post">
+            {% csrf_token %}
+            Name of Group: <input type="text" name="name">
+            Password for Group: <input type="password" name="password">
+            <input type="submit" value="CREATE">
+        </form>
+    </div>
+</div>

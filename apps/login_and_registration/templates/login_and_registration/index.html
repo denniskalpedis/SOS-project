@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login!</title>
+    <style>
+    
+        #choice p {
+            display: inline-block;
+            width: 40%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        #wrapper {
+            width: 30%;
+            margin: auto;
+        }
+
+        span.key {
+            width: 150px;
+            display: inline-block;
+        }
+
+        input.button {
+            margin: 0 auto;
+            width: 100px;
+            display: inline-block;
+        }
+
+        #login {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="choice">
+            <p><a href="/login_form">LOGIN</a></p>
+            <p><a href="/register_form">REGISTER</a></p>
+        </div>
+        <div id="login">
+            {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                    <li class="error">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% if request.session.index == 'login' %} 
+        
+            <form action="/login" method="POST">
+                {% csrf_token %}
+                <span class="key">E-Mail: </span><input type="text" name="email"><br>
+                <span class="key">password: </span><input type="password" name="password"><br><br><br>
+                <input type="submit" value="Login" class="button">
+            </form>
+        
+        {% elif request.session.index == 'register' %}
+            <form action="/register" method="POST">
+                {% csrf_token %}
+                <span class="key">First Name: </span><input type="text" name="first_name"><br>
+                <span class="key">Last Name: </span><input type="text" name="last_name"><br>
+                <span class="key">E-Mail: </span><input type="text" name="email"><br>
+                <span class="key">Password: </span><input type="password" name="password"><br>
+                <span class="key">Confirm Password: </span><input type="password" name="confirm_password"><br><br><br>
+                <input type="submit" value="Register" class="button">
+            </form>
+        {% endif %}
+            
+        </div>
+    </div>
+</body>
+</html>

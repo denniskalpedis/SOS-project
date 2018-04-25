@@ -1,0 +1,10 @@
+{{ userlevel }} <br>
+{{ group.name }}<br>
+{{ group.admin }}<br>
+{{ group.tas.all }} <br>
+{% for user in group.users.all %}
+    {{ user }}
+    {{ user.first_name }} {{ user.last_name }} 
+
+    {% if user.id != group.admin.id and not user in group.tas.all %}<a href="/sos/upgrade_user/{{user.id}}/{{group.id}}">change to TA</a>{% endif %}<br>
+{% endfor %}

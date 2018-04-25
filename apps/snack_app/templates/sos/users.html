@@ -1,0 +1,37 @@
+<!-- {% for user in group.users.all %}
+<p>{{ user.first_name }} {{ user.last_name }} </p>
+<p>{{user.email}}</p>
+{% if user.id != group.admin.id and not user in group.tas.all %}
+<a href="/sos/upgrade_user/{{user.id}}/{{group.id}}">change to TA</a>{% endif %}
+<br> {% if user.id != group.admin.id and not user in group.tas.all %}
+<a href="/sos/upgrade_user/{{user.id}}/{{group.id}}">change to TA</a>{% endif %}
+<br> {% endfor %} -->
+
+
+
+
+<div id="admin">
+    <h2>Admin and managers</h2>
+    <p>{{ group.admin.first_name}} {{ group.admin.last_name}}</p>
+    {% for person in group.tas.all %}
+    <p class="ta">{{person.first_name}} {{person.last_name}}
+        <span>
+            <a href="/sos/downgrade_user/{{person.id}}/{{group.id}}">Remove as Manager</a>
+            <a href="/sos/remove/{{person.id}}/{{group.id}}">Remove from {{group.name}}</a>
+        </span>
+    </p>
+    {% endfor %}
+</div>
+<div>
+    <h2>Users</h2>
+    {% for person in group.users.all %}
+        {% if person.id != group.admin.id and not person in group.tas.all %}
+        <p class="ta">{{person.first_name}} {{person.last_name}}
+            <span>
+                <a href="/sos/upgrade_user/{{person.id}}/{{group.id}}">Promote to Manager</a>
+                <a href="/sos/remove/{{person.id}}/{{group.id}}">Remove from {{group.name}}</a>
+            </span>
+        </p>
+        {% endif %}
+    {% endfor %}
+</div>
