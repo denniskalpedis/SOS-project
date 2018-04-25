@@ -1,40 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'login/styles.css' %}">
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
+    <script src="{% static 'login/scripts.js' %}"></script>
     <title>Login!</title>
-    <style>
-    
-        #choice p {
-            display: inline-block;
-            width: 40%;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-        #wrapper {
-            width: 30%;
-            margin: auto;
-        }
-
-        span.key {
-            width: 150px;
-            display: inline-block;
-        }
-
-        input.button {
-            margin: 0 auto;
-            width: 100px;
-            display: inline-block;
-        }
-
-        #login {
-            text-align: center;
-        }
-
-    </style>
 </head>
 <body>
     <div id="wrapper">
@@ -51,14 +26,12 @@
                 </ul>
             {% endif %}
         {% if request.session.index == 'login' %} 
-        
             <form action="/login" method="POST">
                 {% csrf_token %}
                 <span class="key">E-Mail: </span><input type="text" name="email"><br>
                 <span class="key">password: </span><input type="password" name="password"><br><br><br>
                 <input type="submit" value="Login" class="button">
             </form>
-        
         {% elif request.session.index == 'register' %}
             <form action="/register" method="POST">
                 {% csrf_token %}

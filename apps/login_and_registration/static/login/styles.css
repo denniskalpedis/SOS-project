@@ -1,0 +1,26 @@
+#choice p {
+    display: inline-block;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+#wrapper {
+    width: 30%;
+    margin: auto;
+}
+
+span.key {
+    width: 150px;
+    display: inline-block;
+}
+
+input.button {
+    margin: 0 auto;
+    width: 100px;
+    display: inline-block;
+}
+
+#login {
+    text-align: center;
+}
