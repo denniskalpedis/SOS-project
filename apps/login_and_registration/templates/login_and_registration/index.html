@@ -26,7 +26,6 @@
                 </ul>
             {% endif %}
         {% if request.session.index == 'login' %} 
-        
             <form action="/login" method="POST">
                 {% csrf_token %}
                 <span class="key">E-Mail: </span><input type="text" name="email"><br>
