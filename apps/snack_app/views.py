@@ -14,6 +14,10 @@ def index(request):
     current_user = Users.objects.get(id=request.session["login"])
     if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
         return redirect('/sos/join')
+    elif 'group' not in request.session:
+        logged_in = Users.objects.filter(id=request.session['login'])
+        current_group = logged_in[0].user_groups_joined.all()
+        request.session["group"] = current_group[0].id
     current_group = BuyGroup.objects.get(id=request.session["group"])
     context = {
         "buygroup": BuyGroup.objects.all(),
