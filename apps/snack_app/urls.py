@@ -12,4 +12,9 @@ urlpatterns = [
     url(r'admin/users/?$', views.users),
     url(r'downgrade_user/(?P<user_id>[0-9]+)/(?P<group_id>[0-9]+)/?$', views.downgrade_user),
     url(r'remove/(?P<user_id>[0-9]+)/(?P<group_id>[0-9]+)/?$', views.remove_user),
+    url(r'inventory/?$', views.inventory),
+    url(r'inventory/add/?$', views.inventory_add),
+    url(r'^vote/(?P<id>[0-9]+)/?$', views.vote),
+    url(r'^devote/(?P<id>[0-9]+)/?$', views.devote),
+    url(r'inventory/edit/?$', views.inventory_edit)
 ]

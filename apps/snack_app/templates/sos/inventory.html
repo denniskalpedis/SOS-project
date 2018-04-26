@@ -1,0 +1,48 @@
+
+{% if messages %}
+<ul class="flashes">
+{% for message in messages %}
+    <li class="error">{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+<h1>Add a new item to your inventory</h1>
+<form action="/sos/inventory/add" method="POST">
+    {% csrf_token%}
+    Item: <select name='item'>
+         {% for snack in snacks %}
+            <option value="{{ snack.item_name }}">{{ snack.item_name }}</option>
+        {% endfor %}
+        </select>
+    <br>
+    How do you measure this item: <input type="text" name='measurment'>
+    <br>
+    How much of this item do you have? <input type="number" name="count">
+    <br>
+    What is the maximum amout of this item you would like to have in stock? <input type="number" name='max'>
+    <br>
+    What is the minimum amout of this item you would like to have in stock? <input type="number" name='min'>
+    <br>
+    <input type="submit" value="Add to Inventory">
+</form>
+<div id="inventoryWrapper">
+    {% if inventory %}
+        {% for item in inventory%}
+        <div>
+                <p>{{item.item.item_name}}</p>
+                <p>There are {{item.count}} {{item.unit}} in stock</p>
+                {{ item.item.voters.all.count}}
+                {% for person in item.item.voters.all%}
+                 <p>{{person.first_name}}</p>
+                {% endfor %}
+                {% if user in item.item.voters.all%}
+                <p><a href="/sos/devote/{{item.item.id}}">devote</a></p>
+                {% else %}
+                <p><a href="/sos/vote/{{item.item.id}}">vote</a></p>
+                {% endif%}
+        </div>
+        {%endfor%}
+    {% else%}
+    <h2>You have no items in inventory at this time.</h2>
+    {% endif%}
+</div>

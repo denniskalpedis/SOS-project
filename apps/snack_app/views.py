@@ -152,3 +152,51 @@ def remove_user(request, user_id, group_id):
     group_buy[0].users.remove(Users.objects.get(id=user_id))
     #group_buy[0].tas.del(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
+
+def inventory(request):
+    group = BuyGroup.objects.get(id=request.session['group'])
+    context = {
+        'snacks': group.items.all(),
+        'inventory': group.inventory.all(),
+        'user': Users.objects.get(id=request.session['login'])
+    }
+    return render(request, 'sos/inventory.html', context)
+
+def inventory_add(request):
+    errors = Inventory.objects.validate(request.POST)
+    if len(errors):
+        for error in errors:
+            messages.error(request, error)
+        return redirect('/sos/inventory')
+    group = BuyGroup.objects.get(id=request.session['group'])
+    item = Items.objects.get(buy_group=group,item_name=request.POST['item'])
+    maximum = int(request.POST['max'])
+    minimum = int(request.POST['min'])
+    count = int(request.POST['count'])
+    unit = request.POST['measurment']
+    Inventory.objects.create(item=item,buy_group=group,count=count,unit=unit,max_inventory=maximum,min_inventory=minimum)
+    return redirect('/sos/inventory')
+
+def vote(request, id):
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    item = Items.objects.get(id=id)
+    item.voters.add(user)
+    print 'in votes'
+    return redirect('/sos/inventory')
+
+def devote(request, id):
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    item = Items.objects.get(id=id)
+    item.voters.remove(user)
+    print user
+    print item
+    return redirect('/sos/inventory')
+
+def devotes(request, id):
+    print 'made it to devotes'
+    return redirect('/sos/inventory')
+
+    
+
