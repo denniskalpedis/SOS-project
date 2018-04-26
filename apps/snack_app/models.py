@@ -12,6 +12,13 @@ class BuyGroupManager(models.Manager):
             errors.append("Group name already taken!")
         return errors
 
+class InventoryManager(models.Manager):
+    def validate(self, data):
+        errors= []
+        if  not len(data['min']) or not len(data['max']) or not len(data['count']) or not len(data['measurment']) or not len(data['item']):
+            errors.append('All fields must be filled out.')
+        return errors
+
 
 class BuyGroup(models.Model):
     name=models.CharField(max_length=255)
@@ -31,6 +38,7 @@ class Items(models.Model):
     picture = models.CharField(max_length=255) # to be changed and figured out
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    buy_group = models.ForeignKey(BuyGroup, related_name='items')
     def __str__(self):
         return self.item_name
 
@@ -38,11 +46,10 @@ class Inventory(models.Model):
     count = models.IntegerField()
     item = models.ForeignKey(Items, related_name="stock")
     unit = models.CharField(max_length=255)
-    expiration = models.DateField(blank=True)
-    amount_used = models.IntegerField(blank=True)
     max_inventory = models.IntegerField(blank=True)
     min_inventory = models.IntegerField(blank=True)
-
+    buy_group = models.ForeignKey(BuyGroup, related_name='inventory')
+    objects = InventoryManager()
     def __str__(self):
         return self.count
 
