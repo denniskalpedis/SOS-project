@@ -62,3 +62,10 @@
     width: 800px;
     padding: 15px;
 }
+.box{
+    margin-top: 30px;
+    border: 1.5px solid rgb(25, 160, 238);
+    width: 800px;
+    height: auto;
+    padding: 15px;
+}
