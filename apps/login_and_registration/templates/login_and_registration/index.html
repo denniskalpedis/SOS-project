@@ -32,7 +32,6 @@
                 <span class="key">password: </span><input type="password" name="password"><br><br><br>
                 <input type="submit" value="Login" class="button">
             </form>
-        
         {% elif request.session.index == 'register' %}
             <form action="/register" method="POST">
                 {% csrf_token %}
