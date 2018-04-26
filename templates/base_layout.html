@@ -1,0 +1,37 @@
+{% load static from staticfiles %} <!-- loads the static files for us all through -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Snack Ordering System</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="{% static 'snack/style.css' %}">
+        <!-- <link rel="stylesheet" href="{% static 'login/styles.css' %}">         -->
+        <!-- <link rel="stylesheet" href="{% static 'styles.css' %}">         -->
+        <!-- <link rel="stylesheet" href="/static/styles.css"> works but is not necessary as we would have to manually change every html document if any changes happened in settings-->
+    </head>
+    <body>
+        <!-- <div class="wrapper"> -->
+            <!-- Side navigation -->
+            <!-- <div class="sidenav">
+                    <a href="#" >Home</a>
+                    <a href="#">Groups</a>
+                    <a href="#">Most Requested</a>
+                    <a href="#">Popular</a>
+                    <a href="#">All Snacks</a>
+             <div class="space">
+                <a href="#">Log out</a>
+            </div>
+            </div> -->
+                <!-- Page content -->
+            <div class="main">
+                {% block content %}
+                {% endblock %}
+            </div>
+        <!-- </div> -->
+    </body>
+</html>

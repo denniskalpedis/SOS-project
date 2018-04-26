@@ -1,26 +1,32 @@
-{% if messages %}
-<ul class=flashes>
-{% for message in messages %}
-    <li class="error">{{ message }}</li>
-{% endfor %}
-</ul>
-{% endif %}
-<select>
-    
-    {% for group in user.user_groups_joined.all %}
-    {% if group.admin == user %}
-    <option value="{{group.name}}">admin-{{group.name}}</option>
-    {% elif user in group.tas.all %}
-    <option value="{{group.name}}">TA-{{group.name}}</option>
-    {% else %}
-    <option value="{{group.name}}">{{group.name}}</option>
-    {% endif %}
-    {% endfor %}
-</select>
-{% for group in user.user_groups_joined.all %}
-{% if group.admin == user %}
-<a href="/sos/group/{{ group.id }}">admin-{{group.name}}</a>
-{% else %}
-<a href="/sos/group/{{ group.id }}">{{group.name}}</a>
-{% endif %}
-{% endfor %}
+{% extends 'base_layout.html' %}
+
+    {% block content%}
+
+        {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+            <li class="error">{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <select>
+            
+            {% for group in user.user_groups_joined.all %}
+            {% if group.admin == user %}
+            <option value="{{group.name}}">admin-{{group.name}}</option>
+            {% elif user in group.tas.all %}
+            <option value="{{group.name}}">TA-{{group.name}}</option>
+            {% else %}
+            <option value="{{group.name}}">{{group.name}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        {% for group in user.user_groups_joined.all %}
+        {% if group.admin == user %}
+        <a href="/sos/group/{{ group.id }}" class="btn btn-primary">admin-{{group.name}} </a>
+        {% else %}
+        <a href="/sos/group/{{ group.id }}" class="btn btn-primary">{{group.name}}</a>
+        {% endif %}
+        {% endfor %}
+
+    {% endblock %}
