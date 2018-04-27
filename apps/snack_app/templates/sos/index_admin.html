@@ -15,8 +15,10 @@
         </div>
             ADMIN PAGE!
             {% for snack in snacks %}
-                <img src="{{snack.picture}}" alt="">
-                {{snack.item_name}}
+                <div class="snack">
+                    <div class="image"><img src="{{snack.picture.url}}" alt=""></div> <br>
+                    {{snack.item_name}}
+                </div>
             {% endfor %}
     {% endblock %}
 

@@ -27,7 +27,8 @@ def index(request):
     }
     if "group" in request.session:
         if current_user == current_group.admin or current_user in current_group.tas.all():
-            print Items.objects.all()
+            print Items.objects.all()[0].picture
+            print Items.objects.all()[0].picture.url
             context = {
                 "snacks" : Items.objects.all()
             }

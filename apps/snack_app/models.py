@@ -35,7 +35,7 @@ class BuyGroup(models.Model):
 class Items(models.Model):
     item_name= models.CharField(max_length=255)
     voters = models.ManyToManyField(Users, related_name="votes")
-    picture = models.ImageField(upload_to = '.static/images/') # to be changed and figured out
+    picture = models.ImageField(upload_to = 'images/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     buy_group = models.ForeignKey(BuyGroup, related_name='items')

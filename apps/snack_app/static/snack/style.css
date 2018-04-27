@@ -69,3 +69,24 @@
     height: auto;
     padding: 15px;
 }
+.snack {
+    display: inline-flex;
+    width: 200px;
+    height: 175px;
+    vertical-align: middle;
+    border: 1px solid gray;
+    outline: 1px solid red;
+  }
+.image {
+    display: inline-flex;
+    width: 200px;
+    height: 200px;
+    vertical-align: middle;
+    border: 1px solid gray;
+    outline: 1px solid red;
+  }
+.snack img {
+    max-width: 200px;
+    max-height: 200px;
+    margin: auto;
+  }
