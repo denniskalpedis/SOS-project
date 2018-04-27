@@ -2,7 +2,9 @@
 from __future__ import unicode_literals
 from django.contrib import messages
 from ..login_and_registration.models import Users
+from django.http import HttpResponseForbidden
 from .models import *
+from .forms import *
 import hashlib
 
 from django.shortcuts import render, HttpResponse, redirect, reverse
@@ -25,6 +27,10 @@ def index(request):
     }
     if "group" in request.session:
         if current_user == current_group.admin or current_user in current_group.tas.all():
+            print Items.objects.all()
+            context = {
+                "snacks" : Items.objects.all()
+            }
             return render(request, "sos/index_admin.html", context)
     else:
         return redirect('/sos/join')
@@ -199,4 +205,23 @@ def devotes(request, id):
     return redirect('/sos/inventory')
 
     
+def upload_pic(request):
+    print "uploading pic"
+    print request.method
+    if request.method == 'POST':
+        print "is POST"
+        form = ImageUploadForm(request.POST, request.FILES)
+        print form
+        if form.is_valid():
+            print "Form Valid!"
+            print request.POST["name"]
+            name = request.POST["name"]
+            group = BuyGroup.objects.get(id=request.session['group'])
+            m = Items.objects.create(item_name=name, buy_group=group)
+            m.picture = form.cleaned_data['image']
+            m.save()
+            return redirect('/sos')
+    return HttpResponseForbidden('allowed only via POST')
 
+def new_item(request):
+    return render(request, "sos/new_item.html")
