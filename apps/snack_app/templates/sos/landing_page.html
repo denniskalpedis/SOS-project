@@ -4,6 +4,25 @@
 
 
         <div>
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a class="navbar-brand" href="#">SOS</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">All Groups</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Most Requested</a>
+                        </li>    
+                    </ul>
+                </div>  
+            </nav>
                 {% if messages %}
                     <ul class="flashes">
                     {% for message in messages %}
@@ -13,7 +32,7 @@
                 {% endif %}
                 <!-- Side navigation -->
             <div class="sidenav">
-                    <a href="#" >Home</a><br>
+                    <a href="/sos/" >Home</a><br>
                     <a href="#">All Groups</a>
                     <a href="#">Most Requested</a>
              <div class="space">
@@ -21,13 +40,25 @@
             </div>
             </div>
             <div>
-                <h2>JOIN GROUP!</h2>
-                <form action="/sos/join/" method="POST" class="ajax_form" id="join_group">
+                <div class="page-header" style="margin-top: 25px;">
+                    <h2>JOIN GROUP!</h2>
+                </div>
+                <form class="form-inline" action="/sos/join/" method="POST" class="ajax_form" id="join_group">
+                    {% csrf_token %}
+                    <label for="name">Group Name:</label>
+                    <input type="text" class="form-control"  placeholder="Group Name:" name="name">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control"  placeholder="Enter password" name="password">
+                    <!-- <button type="submit" class="btn btn-primary">JOIN</button> -->
+                    <input type="submit" value="JOIN" class="btn btn-primary">
+                    
+                  </form>
+                <!-- <form action="/sos/join/" method="POST" class="ajax_form" id="join_group">
                     {% csrf_token %}
                     Group Name: <input type="text" name="name" id="" placeholder="Group Name">
                     Password: <input type="text" name="password">
                     <input type="submit" value="JOIN" class="btn btn-primary">
-                </form>
+                </form> -->
                 <div id="placeholder">
                     Placeholder for other users in your group...
                 </div>
@@ -48,13 +79,22 @@
                 });
             </script> -->
             <div id="create">
-                <h2>CREATE GROUP!</h2>
-                <form action="/sos/create" method="post" class="ajax_form" id="create_group">
+                <div class="page-header" style="margin-top: 15px;">
+                    <h2>CREATE GROUP!</h2>
+                </div>
+                <form class="form-inline" action="/sos/create" method="post" class="ajax_form" id="create_group">
+                    {% csrf_token %}
+                    <label for="name">Name of Group:</label>
+                    <input type="text" class="form-control"  placeholder="Name of Group:" name="name">
+                    <label for="password">Password for Group:</label>
+                    <input type="password" class="form-control"  placeholder="Enter password" name="password">
+                    <input type="submit" value="CREATE" class="btn btn-primary">
+                <!-- <form action="/sos/create" method="post" class="ajax_form" id="create_group">
                     {% csrf_token %}
                     Name of Group: <input type="text" name="name">
                     Password for Group: <input type="password" name="password">
                     <input type="submit" value="CREATE" class="btn btn-primary">
-                </form>
+                </form> -->
                 <div id="placeholder1">
                     Placeholder for your group...
                 </div>
