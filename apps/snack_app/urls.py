@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'new_item/?$', views.new_item),
     url(r'upload_pic/?$', views.upload_pic),
     url(r'switch/?$', views.switch),
+    url(r'(?P<id>[0-9]+)/delete?$', views.item_delete),
     # url(r'inventory/edit/?$', views.inventory_edit)
 
 ]

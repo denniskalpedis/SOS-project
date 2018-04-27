@@ -335,3 +335,17 @@ def switch(request):
     if user in newGroup.users.all():
         request.session['group'] = newGroup.id
     return redirect('/sos')
+
+
+def item_delete(request, id):
+    if 'login' not in request.session:
+        return redirect('/')
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    if user != group.admin and user not in group.tas.all():
+        return redirect('/sos')
+    item = Items.objects.get(id=id)
+    item.delete()
+    return redirect('/sos')
