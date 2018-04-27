@@ -327,3 +327,11 @@ def upload_pic(request):
 
 def new_item(request):
     return render(request, "sos/new_item.html")
+
+def switch(request):
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    newGroup = BuyGroup.objects.get(name=request.POST['name'])
+    if user in newGroup.users.all():
+        request.session['group'] = newGroup.id
+    return redirect('/sos')

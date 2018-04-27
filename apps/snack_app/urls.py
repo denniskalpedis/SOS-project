@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'inventory/edit/?$', views.inventory_edit),
     url(r'new_item/?$', views.new_item),
     url(r'upload_pic/?$', views.upload_pic),
+    url(r'switch/?$', views.switch),
     # url(r'inventory/edit/?$', views.inventory_edit)
 
 ]
