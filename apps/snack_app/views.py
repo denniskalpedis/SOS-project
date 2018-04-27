@@ -133,7 +133,7 @@ def joining(request):
     if request.method == "GET":
         return render(request, "sos/landing_page.html")
     elif request.method == "POST":
-        if BuyGroup.objects.filter(request.POST['name']) < 1:
+        if BuyGroup.objects.filter(name=request.POST['name']) < 1:
             return redirect('/sos/join')
         current_user = Users.objects.get(id=request.session["login"])
         group_name = request.POST["name"]
@@ -182,16 +182,16 @@ def remove_user(request, user_id, group_id):
     current_user = Users.objects.get(id=request.session["login"])
     if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
         return redirect('/sos/join')
-    if current_user != group.admin and current_user not in group.tas.all():
+    group_buy = BuyGroup.objects.get(id=group_id)
+    if current_user != group_buy.admin and current_user not in group_buy.tas.all():
         return redirect('/sos')
     user = Users.objects.get(id=user_id)
-    group_buy = BuyGroup.objects.all().filter(id=group_id)
     if "login" not in request.session:
         redirect("/")
     # if current_user == group_buy[0].admin:
-    if user in group_buy[0].tas.all():
-        group_buy[0].tas.remove(Users.objects.get(id=user_id))
-    group_buy[0].users.remove(Users.objects.get(id=user_id))
+    if user in group_buy.tas.all():
+        group_buy.tas.remove(Users.objects.get(id=user_id))
+    group_buy.users.remove(Users.objects.get(id=user_id))
     #group_buy[0].tas.del(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
 
