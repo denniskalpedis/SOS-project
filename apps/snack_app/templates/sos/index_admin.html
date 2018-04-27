@@ -30,6 +30,21 @@
                             <a class="nav-link" href="#">All Users</a>
                         </li>    
                     </ul>
+                    <form action="/sos/switch" method="POST">
+                        {% csrf_token%}
+                        <select name='name'>
+                            {% for group in user.user_groups_joined.all %}
+                            {% if group.admin == user %}
+                            <option value="{{group.name}}">admin-{{group.name}}</option>
+                            {% elif user in group.tas.all %}
+                            <option value="{{group.name}}">TA-{{group.name}}</option>
+                            {% else %}
+                            <option value="{{group.name}}">{{group.name}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="GO">
+                    </form>
                 </div>  
             </nav>
 
