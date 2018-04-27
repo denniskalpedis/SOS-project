@@ -22,14 +22,14 @@ def index(request):
         request.session["group"] = current_group[0].id
     current_group = BuyGroup.objects.get(id=request.session["group"])
     context = {
-        "buygroup": BuyGroup.objects.all(),
+        "buygroup": current_group,
         "user": current_user,
         "items": current_group.items.all()
     }
 
     if current_user == current_group.admin or current_user in current_group.tas.all():
         context = {
-            "buygroup": BuyGroup.objects.all(),
+            "buygroup": current_group,
             "user": current_user,
             "snacks": current_group.items.all()
         }
