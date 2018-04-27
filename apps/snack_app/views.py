@@ -29,7 +29,9 @@ def index(request):
 
     if current_user == current_group.admin or current_user in current_group.tas.all():
         context = {
-            "snacks" : Items.objects.all()
+            "buygroup": BuyGroup.objects.all(),
+            "user": current_user,
+            "snacks": current_group.items.all()
         }
         return render(request, "sos/index_admin.html", context) 
     return render(request, "sos/index.html", context)
@@ -112,14 +114,14 @@ def upgrade_user(request, user_id, group_id):
     current_user = Users.objects.get(id=request.session["login"])
     if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
         return redirect('/sos/join')
-    if current_user != group.admin and current_user not in group.tas.all():
+    group_buy = BuyGroup.objects.get(id=group_id)
+    if current_user != group_buy.admin and current_user not in group_buy.tas.all():
         return redirect('/sos')
     current_user = Users.objects.get(id=request.session["login"])
-    group_buy = BuyGroup.objects.all().filter(id=group_id)
     if "login" not in request.session:
         redirect("/")
     # if current_user == group_buy[0].admin:
-    group_buy[0].tas.add(Users.objects.get(id=user_id))
+    group_buy.tas.add(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
 
 def md5encode(key, group):
@@ -146,6 +148,7 @@ def users(request):
     current_user = Users.objects.get(id=request.session["login"])
     if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
         return redirect('/sos/join')
+    group = BuyGroup.objects.get(id=request.session['group'])
     if current_user != group.admin and current_user not in group.tas.all():
         return redirect('/sos')
     group_buy = BuyGroup.objects.all().filter(id=request.session['group'])
@@ -161,13 +164,13 @@ def downgrade_user(request, user_id, group_id):
     current_user = Users.objects.get(id=request.session["login"])
     if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
         return redirect('/sos/join')
-    if current_user != group.admin and current_user not in group.tas.all():
+    group_buy = BuyGroup.objects.get(id=group_id)
+    if current_user != group_buy.admin and current_user not in group_buy.tas.all():
         return redirect('/sos')
-    group_buy = BuyGroup.objects.all().filter(id=group_id)
     if "login" not in request.session:
         redirect("/")
     # if current_user == group_buy[0].admin:
-    group_buy[0].tas.remove(Users.objects.get(id=user_id))
+    group_buy.tas.remove(Users.objects.get(id=user_id))
     #group_buy[0].tas.del(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
 
