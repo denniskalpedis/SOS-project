@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'create/?$', views.create), 
     url(r'group/(?P<id>[0-9a-zA-Z% ]+)?/?$', views.group), 
     url(r'upgrade_user/(?P<user_id>[0-9]+)/(?P<group_id>[0-9]+)/?$', views.upgrade_user),
-    url(r'admin/users/?$', views.users),
+    url(r'users/?$', views.users),
     url(r'downgrade_user/(?P<user_id>[0-9]+)/(?P<group_id>[0-9]+)/?$', views.downgrade_user),
     url(r'remove/(?P<user_id>[0-9]+)/(?P<group_id>[0-9]+)/?$', views.remove_user),
     url(r'inventory/?$', views.inventory),
