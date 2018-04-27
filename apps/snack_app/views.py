@@ -163,7 +163,7 @@ def remove_user(request, user_id, group_id):
 def inventory(request):
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
-    if user is not group.admin and user not in group.tas.all():
+    if user != group.admin and user not in group.tas.all():
         return redirect('/sos')
     context = {
         'snacks': group.items.all(),
@@ -211,7 +211,7 @@ def devote(request, id):
 def inventory_edit(request):
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
-    if user is not group.admin and user not in group.tas.all():
+    if user != group.admin and user not in group.tas.all():
         return redirect('/sos')
     errors = Inventory.objects.validate(request.POST)
     if len(errors):
@@ -230,7 +230,7 @@ def inventory_edit(request):
 def inventory_delete(request, id):
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
-    if user is not group.admin and user not in group.tas.all():
+    if user != group.admin and user not in group.tas.all():
         return redirect('/sos')
     inventory = Inventory.objects.get(id=id)
     inventory.delete()
