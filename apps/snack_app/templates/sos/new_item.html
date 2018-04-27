@@ -1,0 +1,57 @@
+{% extends 'base_layout.html' %}
+
+    {% block content%}
+        <!-- Side navigation -->
+        <div class="sidenav">
+                <a href="/sos/">Home</a>
+                <a href="#">All Items</a>
+                <a href="#">Stock status</a>                
+                <a href="#">Most Requested</a>
+                <a href="#">Cart</a>
+                <div class="space">
+                    <a href="/logout">Log out</a>
+                </div>
+        </div>
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a class="navbar-brand" href="#">SOS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Most Requested</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Items</a>
+                    </li>    
+                </ul>
+            </div>  
+        </nav>
+
+        <form action="upload_pic" method="POST" enctype="multipart/form-data" style="margin: 30px;">
+            {% csrf_token %}            
+            <div class="form-group">
+                <label for="image">Upload image file</label>
+                <input type="file" class="form-control-file" id="id_image" name="image">
+            </div>
+            <div class="form-group">
+                <label for="name">Item Name:</label>
+                <input type="text" class="form-control" placeholder="Item Name" name="name">
+            </div> 
+            <input type="submit" value="Submit" class="btn btn-primary">  
+        </form>
+        <!-- <form action="upload_pic" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>
+            <input id="id_image" type="file" class="" name="image">
+            </p>
+            Item Name: <input type="text" name="name">
+            <input type="submit" value="Submit" />
+        </form>
+     -->
+
+{% endblock %}

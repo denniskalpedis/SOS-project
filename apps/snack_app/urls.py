@@ -5,7 +5,7 @@ urlpatterns = [
     url(r'^$', views.index),  
     #url(r'join/(?P<id>[0-9a-zA-Z% ]+)?/?$', views.join), 
     url(r'join/?$', views.joining),
-    url(r'new/?$', views.new), 
+    # url(r'new/?$', views.new), 
     url(r'create/?$', views.create), 
     url(r'group/(?P<id>[0-9a-zA-Z% ]+)?/?$', views.group), 
     url(r'upgrade_user/(?P<user_id>[0-9]+)/(?P<group_id>[0-9]+)/?$', views.upgrade_user),
@@ -18,4 +18,8 @@ urlpatterns = [
     url(r'^devote/(?P<id>[0-9]+)/?$', views.devote),
     url(r'inventory/(?P<id>[0-9]+)/delete?$', views.inventory_delete),
     url(r'inventory/edit/?$', views.inventory_edit),
+    url(r'new_item/?$', views.new_item),
+    url(r'upload_pic/?$', views.upload_pic),
+    # url(r'inventory/edit/?$', views.inventory_edit)
+
 ]
