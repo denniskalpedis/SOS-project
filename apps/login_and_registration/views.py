@@ -46,9 +46,9 @@ def register(request):
 
 def logout(request):
     request.session['login'] = "bad"
-    request.session['name'] = "bad"
+    request.session['group'] = "bad"
     del request.session['login']
-    del request.session['name']
+    del request.session['group']
     return redirect('/')
 
 def success(request):

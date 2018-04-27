@@ -22,20 +22,18 @@ def index(request):
         request.session["group"] = current_group[0].id
     current_group = BuyGroup.objects.get(id=request.session["group"])
     context = {
-        "buygroup": BuyGroup.objects.all(),
-        "user": current_user
+        "buygroup": current_group,
+        "user": current_user,
+        "items": current_group.items.all()
     }
-    if "group" in request.session:
-        if current_user == current_group.admin or current_user in current_group.tas.all():
-            print Items.objects.all()[0].picture
-            print Items.objects.all()[0].picture.url
-            context = {
-                "snacks" : Items.objects.all()
-            }
-            return render(request, "sos/index_admin.html", context)
-    else:
-        return redirect('/sos/join')
-    
+
+    if current_user == current_group.admin or current_user in current_group.tas.all():
+        context = {
+            "buygroup": current_group,
+            "user": current_user,
+            "snacks": current_group.items.all()
+        }
+        return render(request, "sos/index_admin.html", context) 
     return render(request, "sos/index.html", context)
 
 # def new(request):
@@ -44,6 +42,9 @@ def index(request):
 #     return render(request, "sos/create.html")
 
 def create(request):
+    print 'errors'
+    if 'login' not in request.session:
+        return redirect('/')
     errors = BuyGroup.objects.validate(request.POST)
     if len(errors):
         for error in errors:
@@ -85,6 +86,8 @@ def create(request):
 #     return redirect('/sos')
 
 def group(request, id):
+    if 'login' not in request.session:
+        return redirect('/')
     current_user = Users.objects.get(id=request.session["login"])
     group_buy = BuyGroup.objects.all().filter(id=id)
     if "login" not in request.session:
@@ -106,32 +109,50 @@ def group(request, id):
     return render(request, "sos/group.html", context)
 
 def upgrade_user(request, user_id, group_id):
+    if 'login' not in request.session:
+        return redirect('/')
     current_user = Users.objects.get(id=request.session["login"])
-    group_buy = BuyGroup.objects.all().filter(id=group_id)
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
+    group_buy = BuyGroup.objects.get(id=group_id)
+    if current_user != group_buy.admin and current_user not in group_buy.tas.all():
+        return redirect('/sos')
+    current_user = Users.objects.get(id=request.session["login"])
     if "login" not in request.session:
         redirect("/")
     # if current_user == group_buy[0].admin:
-    group_buy[0].tas.add(Users.objects.get(id=user_id))
+    group_buy.tas.add(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
 
 def md5encode(key, group):
     return hashlib.sha256(key.encode()+group.encode()).hexdigest()
 
 def joining(request):
+    if 'login' not in request.session:
+        return redirect('/')
     if request.method == "GET":
         return render(request, "sos/landing_page.html")
     elif request.method == "POST":
+        if BuyGroup.objects.filter(name=request.POST['name']) < 1:
+            return redirect('/sos/join')
         current_user = Users.objects.get(id=request.session["login"])
         group_name = request.POST["name"]
-        group_buy = BuyGroup.objects.all().filter(name=group_name)
-        if request.POST["password"] == group_buy[0].password:
-            group_buy[0].users.add(current_user)
-            request.session["group"] = group_buy[0].id
+        group_buy = BuyGroup.objects.get(name=group_name)
+        if request.POST["password"] == group_buy.password:
+            group_buy.users.add(current_user)
+            request.session["group"] = group_buy.id
             return redirect('/sos')
     current_user = Users.objects.get(id=request.session["login"])
 
 def users(request):
+    if 'login' not in request.session:
+        return redirect('/')
     current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
+    group = BuyGroup.objects.get(id=request.session['group'])
+    if current_user != group.admin and current_user not in group.tas.all():
+        return redirect('/sos')
     group_buy = BuyGroup.objects.all().filter(id=request.session['group'])
     context = {
         "user": current_user,
@@ -140,27 +161,46 @@ def users(request):
     return render(request,'sos/users.html', context)
 
 def downgrade_user(request, user_id, group_id):
-    group_buy = BuyGroup.objects.all().filter(id=group_id)
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
+    group_buy = BuyGroup.objects.get(id=group_id)
+    if current_user != group_buy.admin and current_user not in group_buy.tas.all():
+        return redirect('/sos')
     if "login" not in request.session:
         redirect("/")
     # if current_user == group_buy[0].admin:
-    group_buy[0].tas.remove(Users.objects.get(id=user_id))
+    group_buy.tas.remove(Users.objects.get(id=user_id))
     #group_buy[0].tas.del(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
 
 def remove_user(request, user_id, group_id):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
+    group_buy = BuyGroup.objects.get(id=group_id)
+    if current_user != group_buy.admin and current_user not in group_buy.tas.all():
+        return redirect('/sos')
     user = Users.objects.get(id=user_id)
-    group_buy = BuyGroup.objects.all().filter(id=group_id)
     if "login" not in request.session:
         redirect("/")
     # if current_user == group_buy[0].admin:
-    if user in group_buy[0].tas.all():
-        group_buy[0].tas.remove(Users.objects.get(id=user_id))
-    group_buy[0].users.remove(Users.objects.get(id=user_id))
+    if user in group_buy.tas.all():
+        group_buy.tas.remove(Users.objects.get(id=user_id))
+    group_buy.users.remove(Users.objects.get(id=user_id))
     #group_buy[0].tas.del(Users.objects.get(id=user_id))
     return redirect('/sos/admin/users')
 
 def inventory(request):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
     if user != group.admin and user not in group.tas.all():
@@ -173,6 +213,11 @@ def inventory(request):
     return render(request, 'sos/inventory.html', context)
 
 def inventory_add(request):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
     if user is not group.admin and user not in group.tas.all():
@@ -191,6 +236,11 @@ def inventory_add(request):
     return redirect('/sos/inventory')
 
 def vote(request, id):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
     item = Items.objects.get(id=id)
@@ -199,6 +249,11 @@ def vote(request, id):
     return redirect('/sos/inventory')
 
 def devote(request, id):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
     item = Items.objects.get(id=id)
@@ -209,6 +264,11 @@ def devote(request, id):
 
 
 def inventory_edit(request):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
     if user != group.admin and user not in group.tas.all():
@@ -228,6 +288,11 @@ def inventory_edit(request):
     return redirect('/sos/inventory')
 
 def inventory_delete(request, id):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
     if user != group.admin and user not in group.tas.all():
@@ -238,6 +303,11 @@ def inventory_delete(request, id):
 
     
 def upload_pic(request):
+    if 'login' not in request.session:
+        return redirect('/')
+    current_user = Users.objects.get(id=request.session["login"])
+    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
+        return redirect('/sos/join')
     print "uploading pic"
     print request.method
     if request.method == 'POST':

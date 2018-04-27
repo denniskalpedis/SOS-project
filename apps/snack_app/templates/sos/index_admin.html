@@ -4,8 +4,8 @@
         <!-- Side navigation -->
         <div class="sidenav">
                 <a href="/sos/">Home</a>
-                <a href="#">Groups</a>
-                <a href="#">All Users</a>                
+                <a href="/sos/join">Join A Group</a>
+                <a href="/sos/users">All Users</a>                
                 <a href="#">Most Requested</a>
                 <a href="#">Cart</a>
                 <a href="#">All Items</a>
@@ -14,7 +14,7 @@
         </div>
         </div>
         <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-                <a class="navbar-brand" href="#">SOS</a>
+                <a class="navbar-brand" href="#">{{buygroup.name}}</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -32,7 +32,7 @@
                     </ul>
                 </div>  
             </nav>
-            ADMIN PAGE!
+
             <div class="container">
                 <div class="row">
                     {% for snack in snacks %}
@@ -41,8 +41,7 @@
                                 <img class="card-img-top" src="{{snack.picture.url}}" alt="Item image" style="width:100%">
                                 <div class="card-body">
                                   <h4 class="card-title">{{snack.item_name}}</h4>
-                                  <p class="card-text">Trial</p>
-                                  <a href="#" class="btn btn-primary">Vote</a>
+                                  <p class="card-text">This item has {{snack.voters.count}} votes.</p>
                                 </div>
                             <!-- <div class="snack">
                                 <div class="image"><img src="{{snack.picture.url}}" alt=""></div> <br>

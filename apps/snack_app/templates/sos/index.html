@@ -1,7 +1,31 @@
 {% extends 'base_layout.html' %}
 
     {% block content%}
-
+    <div class="sidenav">
+            <a href="/sos/">Home</a>
+     <div class="space">
+        <a href="/logout">Log out</a>
+    </div>
+    </div>
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a class="navbar-brand" href="#">SOS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">All Groups</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">All Users</a>
+                    </li>    
+                </ul>
+            </div>  
+        </nav>
         {% if messages %}
         <ul class=flashes>
         {% for message in messages %}
@@ -21,12 +45,58 @@
             {% endif %}
             {% endfor %}
         </select>
-        {% for group in user.user_groups_joined.all %}
-        {% if group.admin == user %}
-        <a href="/sos/group/{{ group.id }}" class="btn btn-primary">admin-{{group.name}} </a>
-        {% else %}
-        <a href="/sos/group/{{ group.id }}" class="btn btn-primary">{{group.name}}</a>
-        {% endif %}
-        {% endfor %}
+
+        <form action="upload_pic" method="POST" enctype="multipart/form-data" style="margin: 30px;">
+            {% csrf_token %}            
+            <div class="form-group">
+                <label for="image">Upload image file</label>
+                <input type="file" class="form-control-file" id="id_image" name="image">
+            </div>
+            <div class="form-group">
+                <label for="name">Item Name:</label>
+                <input type="text" class="form-control" placeholder="Item Name" name="name">
+            </div> 
+            <input type="submit" value="Submit" class="btn btn-primary">  
+        </form>
+        <div id="item_container">
+            {% if items%}
+            <!-- {% for item in items %}
+            <div class="snack">
+                <div class="image"><img src="{{item.picture.url}}" alt=""></div>
+                <h3>{{item.name}}</h3>
+                <p>This item has {{item.voters.count}} votes</p>
+                {% if user in item.voters.all%}
+                <p><a href="/sos/devote/{{item.id}}">Remove your vote.</a></p>
+                {% else %}
+                <p><a href="/sos/vote/{{item.id}}">Vote for this item.</a></p>
+                {% endif %}
+            </div>
+            {% endfor%} -->
+            
+            <div class="container">
+                    <div class="row">
+                        {% for snack in items %}
+                        <div class="col-3">
+                            <div class="card" style="width:200px">
+                                    <img class="card-img-top" src="{{snack.picture.url}}" alt="Item image" style="width:100%">
+                                    <div class="card-body">
+                                      <h4 class="card-title">{{snack.item_name}}</h4>
+                                      <p class="card-text">This item has {{snack.voters.count}} votes</p>
+                                      {% if user in snack.voters.all%}
+                                      <p><a href="/sos/devote/{{snack.id}}" class="btn btn-primary">Remove your vote.</a></p>
+                                      {% else %}
+                                      <p><a href="/sos/vote/{{snack.id}}" class="btn btn-primary">Vote for this item.</a></p>
+                                      {% endif %}
+                                    </div>
+                                <!-- <div class="snack">
+                                    <div class="image"><img src="{{snack.picture.url}}" alt=""></div> <br>
+                                    {{snack.item_name}} -->
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif%}
+        </div>
 
     {% endblock %}
