@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'inventory/add/?$', views.inventory_add),
     url(r'^vote/(?P<id>[0-9]+)/?$', views.vote),
     url(r'^devote/(?P<id>[0-9]+)/?$', views.devote),
-    url(r'inventory/edit/?$', views.inventory_edit)
+    url(r'inventory/(?P<id>[0-9]+)/delete?$', views.inventory_delete),
+    url(r'inventory/edit/?$', views.inventory_edit),
 ]
