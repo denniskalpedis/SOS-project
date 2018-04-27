@@ -133,12 +133,14 @@ def joining(request):
     if request.method == "GET":
         return render(request, "sos/landing_page.html")
     elif request.method == "POST":
+        if BuyGroup.objects.filter(request.POST['name']) < 1:
+            return redirect('/sos/join')
         current_user = Users.objects.get(id=request.session["login"])
         group_name = request.POST["name"]
-        group_buy = BuyGroup.objects.all().filter(name=group_name)
-        if request.POST["password"] == group_buy[0].password:
-            group_buy[0].users.add(current_user)
-            request.session["group"] = group_buy[0].id
+        group_buy = BuyGroup.objects.get(name=group_name)
+        if request.POST["password"] == group_buy.password:
+            group_buy.users.add(current_user)
+            request.session["group"] = group_buy.id
             return redirect('/sos')
     current_user = Users.objects.get(id=request.session["login"])
 
