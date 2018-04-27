@@ -160,7 +160,10 @@ def remove_user(request, user_id, group_id):
     return redirect('/sos/admin/users')
 
 def inventory(request):
+    user = Users.objects.get(id=request.session['login'])
     group = BuyGroup.objects.get(id=request.session['group'])
+    if user is not group.admin and user not in group.tas.all():
+        return redirect('/sos')
     context = {
         'snacks': group.items.all(),
         'inventory': group.inventory.all(),
@@ -169,12 +172,15 @@ def inventory(request):
     return render(request, 'sos/inventory.html', context)
 
 def inventory_add(request):
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    if user is not group.admin and user not in group.tas.all():
+        return redirect('/sos')
     errors = Inventory.objects.validate(request.POST)
     if len(errors):
         for error in errors:
             messages.error(request, error)
         return redirect('/sos/inventory')
-    group = BuyGroup.objects.get(id=request.session['group'])
     item = Items.objects.get(buy_group=group,item_name=request.POST['item'])
     maximum = int(request.POST['max'])
     minimum = int(request.POST['min'])
@@ -200,8 +206,33 @@ def devote(request, id):
     print item
     return redirect('/sos/inventory')
 
-def devotes(request, id):
-    print 'made it to devotes'
+
+def inventory_edit(request):
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    if user is not group.admin and user not in group.tas.all():
+        return redirect('/sos')
+    errors = Inventory.objects.validate(request.POST)
+    if len(errors):
+        for error in errors:
+            messages.error(request, error)
+        return redirect('/sos/inventory')
+    item = group.items.get(item_name=request.POST['item'])
+    inventory = group.inventory.get(item=item)
+    inventory.count = int(request.POST['count'])
+    inventory.unit = request.POST['measurment']
+    inventory.max_inventory = int(request.POST['max'])
+    inventory.min_inventory = int(request.POST['min'])
+    inventory.save()
+    return redirect('/sos/inventory')
+
+def inventory_delete(request, id):
+    user = Users.objects.get(id=request.session['login'])
+    group = BuyGroup.objects.get(id=request.session['group'])
+    if user is not group.admin and user not in group.tas.all():
+        return redirect('/sos')
+    inventory = Inventory.objects.get(id=id)
+    inventory.delete()
     return redirect('/sos/inventory')
 
     

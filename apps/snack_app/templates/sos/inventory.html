@@ -112,5 +112,26 @@
             </div>
             {% endif%}
         </div>
+        <h2>Edit your inventory</h2>
+        <form action="/sos/inventory/edit" method="POST">
+            {% csrf_token%} Item:
+            <select name='item'>
+                {% for snack in inventory %}
+                <option value="{{ snack.item.item_name }}">{{ snack.item.item_name }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            How do you measure this item:
+            <input type="text" name='measurment'>
+            <br> How much of this item do you have?
+            <input type="number" name="count">
+            <br> What is the maximum amount of this item you would like to have in stock?
+            <input type="number" name='max'>
+            <br> What is the minimum amount of this item you would like to have in stock?
+            <input type="number" name='min'>
+            <br>
+            <input type="submit" value="Add to Inventory">
+            <br>
+        </form>
 
     {% endblock %}
