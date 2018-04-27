@@ -45,13 +45,6 @@
             {% endif %}
             {% endfor %}
         </select>
-        {% for group in user.user_groups_joined.all %}
-        {% if group.admin == user %}
-        <a href="/sos/group/{{ group.id }}" class="btn btn-primary">admin-{{group.name}} </a>
-        {% else %}
-        <a href="/sos/group/{{ group.id }}" class="btn btn-primary">{{group.name}}</a>
-        {% endif %}
-        {% endfor %}
 
         <form action="upload_pic" method="POST" enctype="multipart/form-data" style="margin: 30px;">
             {% csrf_token %}            
