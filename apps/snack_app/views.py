@@ -23,17 +23,15 @@ def index(request):
     current_group = BuyGroup.objects.get(id=request.session["group"])
     context = {
         "buygroup": BuyGroup.objects.all(),
-        "user": current_user
+        "user": current_user,
+        "items": current_group.items.all()
     }
-    if "group" in request.session:
-        if current_user == current_group.admin or current_user in current_group.tas.all():
-            context = {
-                "snacks" : Items.objects.all()
-            }
-            return render(request, "sos/index_admin.html", context)
-    else:
-        return redirect('/sos/join')
-    
+
+    if current_user == current_group.admin or current_user in current_group.tas.all():
+        context = {
+            "snacks" : Items.objects.all()
+        }
+        return render(request, "sos/index_admin.html", context) 
     return render(request, "sos/index.html", context)
 
 # def new(request):
@@ -42,11 +40,9 @@ def index(request):
 #     return render(request, "sos/create.html")
 
 def create(request):
+    print 'errors'
     if 'login' not in request.session:
         return redirect('/')
-    current_user = Users.objects.get(id=request.session["login"])
-    if 'group' not in request.session and current_user.user_groups_joined.all().count()<1:
-        return redirect('/sos/join')
     errors = BuyGroup.objects.validate(request.POST)
     if len(errors):
         for error in errors:

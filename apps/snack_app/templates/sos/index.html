@@ -29,4 +29,33 @@
         {% endif %}
         {% endfor %}
 
+        <form action="upload_pic" method="POST" enctype="multipart/form-data" style="margin: 30px;">
+            {% csrf_token %}            
+            <div class="form-group">
+                <label for="image">Upload image file</label>
+                <input type="file" class="form-control-file" id="id_image" name="image">
+            </div>
+            <div class="form-group">
+                <label for="name">Item Name:</label>
+                <input type="text" class="form-control" placeholder="Item Name" name="name">
+            </div> 
+            <input type="submit" value="Submit" class="btn btn-primary">  
+        </form>
+        <div id="item_container">
+            {% if items%}
+            {% for item in items %}
+            <div>
+                <img src="{{item.picture.url}}" alt="">
+                <h3>{{item.name}}</h3>
+                <p>This item has {{item.voters.count}} votes</p>
+                {% if user in item.voters.all%}
+                <p><a href="/sos/devote/{{item.id}}">Remove your vote.</a></p>
+                {% else %}
+                <p><a href="/sos/vote/{{item.id}}">Vote for this item.</a></p>
+                {% endif %}
+            </div>
+            {% endfor%}
+            {% endif%}
+        </div>
+
     {% endblock %}
